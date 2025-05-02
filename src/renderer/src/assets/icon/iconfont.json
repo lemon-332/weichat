@@ -1,0 +1,30 @@
+{
+  "id": "4911493",
+  "name": "chat",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "122696",
+      "name": "email",
+      "font_class": "email",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "629360",
+      "name": "锁",
+      "font_class": "suo",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "5961299",
+      "name": "安全",
+      "font_class": "anquan",
+      "unicode": "ec4d",
+      "unicode_decimal": 60493
+    }
+  ]
+}
