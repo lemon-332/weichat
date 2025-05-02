@@ -2,7 +2,7 @@
   <div class="login-panel">
     <div class="login-top drag">微信</div>
     <div class="login-context">
-      <el-form :model="loginForm" ref="form" :rules="rules" label-width="0px" @submit.prevent>
+      <el-form :model="loginForm" ref="loginRef" :rules="rules" label-width="0px" @submit.prevent>
         <el-form-item prop="email">
           <el-input v-model.trim="loginForm.email" size="large" clearable placeholder="请输入邮箱">
             <template #prefix>
@@ -10,13 +10,15 @@
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="nickname">
-          <el-input v-model.trim="loginForm.email" size="large" clearable placeholder="请输入昵称">
+        <el-form-item v-if="!isLogin" prop="nickname">
+          <el-input
+            v-model.trim="loginForm.nickname"
+            size="large"
+            clearable
+            placeholder="请输入昵称"
+          >
             <template #prefix>
-              <el-icon>
-                <Edit />
-              </el-icon>
-              <span class="iconfont icon-email"></span>
+              <el-icon size="16"><User /></el-icon>
             </template>
           </el-input>
         </el-form-item>
@@ -33,9 +35,22 @@
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="checkcode">
+        <el-form-item v-if="!isLogin" prop="rePassword">
           <el-input
-            v-model.trim="loginForm.checkcode"
+            v-model.trim="loginForm.rePassword"
+            show-password
+            size="large"
+            clearable
+            placeholder="请输入再次密码"
+          >
+            <template #prefix>
+              <span class="iconfont icon-suo"></span>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="checkCode">
+          <el-input
+            v-model.trim="loginForm.checkCode"
             size="large"
             clearable
             placeholder="请输入验证码"
@@ -45,26 +60,55 @@
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="checkcode">
-          <el-button class="login-btn" type="primary">登录</el-button>
+        <el-form-item>
+          <el-button class="login-btn" type="primary" @click="submit">
+            {{ isLogin ? '登陆' : '注册' }}
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="login-bottom">
-      <span>没有账号?</span>
+      <span @click="changeType">{{ isLogin ? '没有账号?' : '已有账号?' }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
-const loginForm = reactive({})
+import { checkCode } from '@/api/login'
+
+const loginForm = ref({})
+const isLogin = ref(true)
+const loginRef = ref(null)
+
 const rules = {
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+  nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-  checkcode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+  rePassword: [{ required: true, message: '请再次输入密码', trigger: 'blur' }],
+  checkCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
 }
 
-const isLogin = ref(true)
+const changeType = () => {
+  window.ipcRenderer.send('loginOrRegister', !isLogin.value)
+  isLogin.value = !isLogin.value
+  nextTick(() => {
+    loginRef.value.resetFields()
+    loginForm.value = {}
+  })
+}
+
+const submit = () => {
+  loginRef.value.validate(async (valid) => {
+    if (!valid) {
+      return
+    }
+  })
+}
+
+onMounted(async () => {
+  const res = await checkCode()
+  console.log(res)
+})
 </script>
 
 <style scoped lang="scss">
@@ -90,6 +134,9 @@ const isLogin = ref(true)
     display: flex;
     justify-content: flex-end;
     color: rgb(142, 159, 180);
+    span {
+      cursor: pointer;
+    }
   }
 }
 </style>

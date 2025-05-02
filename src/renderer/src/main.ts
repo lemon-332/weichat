@@ -6,7 +6,7 @@ import '@/assets/scss/styles.scss'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import { createApp } from 'vue'
-
+import '@/mockjs/index.ts'
 import router from '@/router'
 
 import App from './App.vue'
