@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { onLoginOrRegister, onLoginSuccess } from './ipc'
 const NODE_ENV = process.env.NODE_ENV
 
 const login_width = 300
@@ -26,16 +27,6 @@ function createWindow(): void {
     }
   })
 
-  ipcMain.on('loginOrRegister', (event, isLogin) => {
-    mainWindow.setResizable(true)
-    if (!isLogin) {
-      mainWindow.setSize(login_width, register_height)
-    } else {
-      mainWindow.setSize(login_width, login_height)
-    }
-    mainWindow.setResizable(false)
-  })
-
   if (NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools()
   }
@@ -56,6 +47,24 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  onLoginOrRegister((isLogin) => {
+    mainWindow.setResizable(true)
+    if (!isLogin) {
+      mainWindow.setSize(login_width, register_height)
+    } else {
+      mainWindow.setSize(login_width, login_height)
+    }
+    mainWindow.setResizable(false)
+  })
+
+  onLoginSuccess((config) => {
+    mainWindow.setResizable(true)
+    mainWindow.setSize(850, 800)
+    mainWindow.center()
+    mainWindow.setMaximizable(true)
+    mainWindow.setMinimumSize(800, 600)
+  })
 }
 
 // This method will be called when Electron has finished

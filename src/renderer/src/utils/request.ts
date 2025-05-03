@@ -5,7 +5,7 @@ let loading: any = null
 
 const request = axios.create({
   withCredentials: true, // send cookies when cross-domain requests
-  baseURL: '/api', // url = base url + request url
+  baseURL: '/api',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json;charset=utf-8'

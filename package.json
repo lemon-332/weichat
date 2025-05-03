@@ -1,9 +1,9 @@
 {
-  "name": "easychat-front",
+  "name": "weichat",
   "version": "1.0.0",
-  "description": "EasyChat",
+  "description": "仿微信",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "lemon",
   "homepage": "https://www.electronjs.org",
   "scripts": {
     "format": "prettier --write .",
@@ -20,8 +20,8 @@
     "extraResources": [
       "./assets/**"
     ],
-    "productName": "EasyChat",
-    "appId": "com.easychat",
+    "productName": "Weichat",
+    "appId": "lemon.weichat",
     "directories": {
       "output": "installPackages"
     },
@@ -34,7 +34,7 @@
       "installerHeaderIcon": "./resources/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "EasyChat"
+      "shortcutName": "Weichat"
     },
     "mac": {
       "icon": "icons/icon.icns"

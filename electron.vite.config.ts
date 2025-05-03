@@ -41,7 +41,11 @@ export default defineConfig({
           enabled: true
         },
         resolvers: [
-          ElementPlusResolver(),
+          ElementPlusResolver({
+            importStyle: 'sass'
+            // directives: true,
+            // version: "2.1.5",
+          }),
           // Auto import icon components
           // 自动导入图标组件
           IconsResolver({
@@ -55,11 +59,7 @@ export default defineConfig({
           IconsResolver({
             enabledCollections: ['ep']
           }),
-          ElementPlusResolver({
-            importStyle: 'sass'
-            // directives: true,
-            // version: "2.1.5",
-          })
+          ElementPlusResolver()
         ]
       }),
       Icons({

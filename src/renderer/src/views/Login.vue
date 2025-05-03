@@ -75,10 +75,15 @@
 
 <script setup>
 import { checkCode } from '@/api/login'
+import { useRouter } from 'vue-router'
+import { useUserInfoStore } from '@/stores/userInfoStore'
 
 const loginForm = ref({})
 const isLogin = ref(true)
 const loginRef = ref(null)
+const router = useRouter()
+
+const userInfoStore = useUserInfoStore()
 
 const rules = {
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
@@ -102,12 +107,34 @@ const submit = () => {
     if (!valid) {
       return
     }
+    if (
+      loginForm.value.password === '123' &&
+      loginForm.value.email === 'admin' &&
+      loginForm.value.checkCode === '123'
+    ) {
+      // window.ipcRenderer.send('loginOrRegister', !isLogin.value)
+      // isLogin.value = !isLogin.value
+      userInfoStore.setUserInfo(loginForm.value)
+      router.push('/main')
+      nextTick(() => {
+        loginRef.value.resetFields()
+        loginForm.value = {}
+      })
+      ElMessage({
+        message: '登录成功',
+        type: 'success'
+      })
+      loginForm.value.userId = '123456'
+      loginForm.value.token = 'd432d33456234'
+      window.ipcRenderer.send('openChat', toRaw(loginForm.value))
+    } else {
+      alert('账号密码错误')
+    }
   })
 }
 
 onMounted(async () => {
   const res = await checkCode()
-  console.log(res)
 })
 </script>
 
